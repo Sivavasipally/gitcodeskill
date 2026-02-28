@@ -1,0 +1,51 @@
+{
+  "_comment": "Copy this file to config/config.json and replace all placeholder values. Remove keys starting with '_' before use.",
+
+  "git_provider": "github",
+  "_git_provider_note": "Either 'github' or 'bitbucket'. Auto-detected from repo_url if omitted.",
+
+  "repo_url": "https://github.com/your-org/your-repo.git",
+  "_repo_url_examples": {
+    "github": "https://github.com/org/repo.git",
+    "bitbucket_server": "https://bitbucket.example.com/scm/PROJ/repo.git",
+    "bitbucket_cloud": "https://bitbucket.org/workspace/repo.git"
+  },
+
+  "git_username": "john.doe",
+  "_git_username_note": "Your Git username (GitHub login or Bitbucket username).",
+
+  "git_password": "YOUR_PERSONAL_ACCESS_TOKEN_OR_APP_PASSWORD",
+  "_git_password_note": "GitHub PAT (Settings > Developer settings > Personal access tokens) OR Bitbucket App Password. Never your real account password.",
+
+  "git_branch": "main",
+  "_git_branch_note": "Default branch to clone and create feature branches from.",
+
+  "github_owner": "your-org",
+  "_github_owner_note": "OPTIONAL (GitHub only). GitHub user or organisation name. Used by multi-repo scan to list and process all repos under this owner.",
+
+  "project_keys": ["PROJ1", "PROJ2"],
+  "_project_keys_note": "OPTIONAL (Bitbucket only). List of Bitbucket project keys. The multi-repo scan will iterate every repository under each project key.",
+
+  "jira_url": "",
+  "_jira_url_note": "OPTIONAL. Leave blank to enter requirements manually in the UI. e.g. https://your-company.atlassian.net",
+
+  "jira_email": "",
+  "_jira_email_note": "OPTIONAL. Email tied to your Jira account (used with the API token).",
+
+  "jira_token": "",
+  "_jira_token_note": "OPTIONAL. Generate at: https://id.atlassian.com/manage-profile/security/api-tokens",
+
+  "jira_ticket": "",
+  "_jira_ticket_note": "OPTIONAL. Default Jira ticket to process. Can be overridden via --ticket flag.",
+
+  "workspace_dir": "/home/john/workspaces",
+  "_workspace_dir_note_linux": "Linux / macOS example: /home/john/workspaces",
+  "_workspace_dir_note_windows": "Windows example: C:/Users/john/workspaces  (use forward slashes or double backslashes)",
+
+  "_usage": [
+    "1. Copy:    cp example_config.json config/config.json",
+    "2. Edit config/config.json — fill in real values, remove all _ keys.",
+    "3. Verify:  python step_0_setup.py --show",
+    "4. Run UI:  streamlit run app.py"
+  ]
+}

@@ -1,0 +1,558 @@
+0:00
+Yesterday Google released agent to agent
+0:03
+protocol and in this video I will
+0:04
+provide a very intuitive explanation of
+0:07
+what exactly it is. Obviously you need
+0:09
+to know what are AI agents. If you don't
+0:12
+I am linking couple of videos and here
+0:14
+is a demo of Google agent space which
+0:18
+uses A2A protocol. So let's say if you
+0:21
+are an organization you are hiring a
+0:23
+software engineer you can attach PDF
+0:25
+file into this agent space and it will
+0:30
+discover the agents which will help with
+0:32
+the task. Okay so that is the first step
+0:35
+in A2A protocol which is this particular
+0:39
+client. Okay the the chatbot that you're
+0:42
+seeing is able to discover other agents.
+0:45
+So this chatbot itself is an agent but
+0:48
+it is having this capability to discover
+0:52
+other agents which can help it perform
+0:54
+particular task. So it found this
+0:56
+particular sourcing agent and then it is
+1:00
+talking to that. Okay. So it is talking
+1:02
+to that using a protocol. You see agent
+1:06
+protocol. So agent protocol allows one
+1:09
+agent to talk to other agent in a
+1:13
+standardized way. So I will just show
+1:15
+you the complete demo here. It uh talked
+1:18
+to that other agent and it is asking you
+1:21
+this clarifying question. Okay. Do you
+1:24
+need a person in plus and minus 3 hours
+1:27
+of US specific time? Uh so now you are
+1:30
+getting into collaboration where clients
+1:32
+and agent must support dynamic
+1:34
+interaction where you can ask clarifying
+1:36
+questions. Okay, what kind of
+1:37
+requirements you have for this
+1:39
+particular uh job requirement and and
+1:42
+that is also part of that standard
+1:45
+protocol. Okay. So you clarify
+1:48
+uh your requirement here and then uh so
+1:51
+this is that user experience negotiation
+1:54
+and it will go to some platforms and it
+1:57
+will find all these job profiles and you
+2:00
+can just say please reach out to
+2:02
+schedule interviews and maybe for
+2:03
+interviews you can use multiple agents.
+2:08
+So the idea here is as an end user
+2:10
+you're talking to client which was that
+2:12
+Google agent workspace and it has one
+2:15
+base agent which is your remote agent
+2:17
+and to accomplish a task it might be
+2:21
+talking to couple of other agents and
+2:24
+wherever you are seeing this green arrow
+2:27
+that's where you are applying A2A
+2:30
+protocol. It's very simple agent to
+2:32
+agent protocol. Now you might wonder how
+2:36
+is it different from model context
+2:38
+protocol. And by the way if you don't
+2:40
+know about MCP I have another video with
+2:42
+a simple explanation. So let me give you
+2:45
+an analogy to explain how this is
+2:48
+different from MCP. Let's say you are a
+2:51
+car repair guy. Uh in our LLM analogy
+2:56
+this person is an LLM and to fix a tire
+3:00
+or something you need all these tools
+3:02
+right? See these are all the tools that
+3:04
+you need to perform various tasks such
+3:07
+as removing the screws, fixing the tire
+3:09
+pressure and so
+3:10
+on. And this entire system where you
+3:14
+have LLM which is this car repair guy,
+3:17
+he has all these tools and both of them
+3:21
+are accomplishing certain task. So this
+3:24
+entire system is called agent which can
+3:27
+accomplish certain tasks such as fixing
+3:29
+tire pressure or fixing whatever. Okay.
+3:32
+And to
+3:34
+communicate, LLM will use this MCP. So
+3:38
+MCP is a protocol
+3:41
+that helps LLM communicate with tools,
+3:45
+resources, prompt, and so on. But in
+3:49
+real life, agent will communicate with
+3:52
+another agent. So if you're a car repair
+3:55
+person, you might have to communicate
+3:58
+with your customer or your part
+4:01
+supplier and you will have often this
+4:06
+backto back back and forth communication
+4:08
+where you're saying okay customer is
+4:10
+saying it shows a tire pressure warning.
+4:13
+You will say okay I fixed it let me
+4:15
+check again and you might find out that
+4:18
+your pressure sensor is broken. then
+4:21
+customer will say okay how much will it
+4:23
+cost? So there is this back and forth.
+4:25
+So part of the protocol is that you need
+4:28
+to enable this back and forth
+4:30
+communication in a standardized way. So
+4:33
+to summarize A2A is a protocol which uh
+4:38
+allows AI agents to communicate with
+4:43
+each other in a standardized way. And
+4:45
+I'm going to link a page from Google.
+4:48
+Google came up with this particular
+4:51
+protocol which is used by many companies
+4:53
+by the way. Intuitit, lang chain,
+4:55
+MongoDB, there are many companies which
+4:57
+has started using this already. Now you
+5:02
+need to know certain concept. The first
+5:04
+one is agent card. So when this lady
+5:07
+wants to repair her car, she has some
+5:11
+way of discovering the right car repair
+5:15
+person. And that discovery happens
+5:17
+through agent card. Okay. So let's say
+5:20
+she might has have different needs. For
+5:23
+example, uh she need a person to repair
+5:25
+her car and she might know a couple of
+5:29
+car repair people. And then she will
+5:32
+have information on a person who can
+5:35
+help her sell the car. So car dealer.
+5:38
+Okay. So she might have a directory
+5:41
+where or a registry where she has all
+5:44
+these agent cards and she knows the name
+5:46
+of the person the description what kind
+5:48
+of skills this person has. Entre mishra
+5:51
+has skills of selling used cars, car
+5:53
+financing whereas John Pandya has all
+5:56
+these skills of oil change, tire repair
+5:58
+and so on. So I'm showing uh the
+6:01
+official documentation where they talk
+6:04
+about discovering agent cards. So let's
+6:07
+say if you are a client who is working
+6:11
+on solving uh some task let's say
+6:14
+finding software engineer you know that
+6:16
+Google agents workspace demo that we saw
+6:20
+now you need to have some way to
+6:22
+discover what other agents you can work
+6:25
+with just like that uh lady customer she
+6:28
+has all that agent cards or agent tool
+6:32
+registry agent registry rather where she
+6:35
+knows that there is this person who is a
+6:38
+car dealer, there is this person who is
+6:40
+a repair person, there is this person
+6:42
+who is the shop owner and so on. So
+6:46
+similarly here there are multiple ways
+6:49
+you can discover agents. The first way
+6:53
+is you can use this particular
+6:56
+agent.json file and clients will use DNS
+7:00
+to resolve known or found domain. Okay.
+7:03
+The other one is registry based where
+7:07
+for an AI application here is the
+7:11
+registry of trusted agents. Okay. And
+7:14
+they're still working on this protocol.
+7:16
+This is sort of like work in progress.
+7:18
+Uh but there will be some kind of
+7:21
+registry. There is a private discovery
+7:23
+also. Okay. There are multiple ways
+7:26
+where a client or the remote agent can
+7:30
+discover other agents. Okay.
+7:33
+Then comes the agent card. So this is
+7:37
+once again a protocol. So you have a
+7:40
+standardized way of showing your agent
+7:43
+card and this is the typescript. This is
+7:45
+the schema. So you should have agent
+7:48
+card. Then you should have name,
+7:49
+description, URL. So these these things
+7:51
+are must. Okay, you understand what the
+7:53
+protocol is. Protocol is basically
+7:56
+defining that standard uh in which you
+7:59
+are going to communicate. So if you are
+8:02
+an agent uh and you want
+8:05
+to send your agent card to other agent,
+8:10
+it has to be in this format. Okay, it
+8:12
+should have provider like which company
+8:14
+it is. Okay, Google, whatever whatever
+8:16
+that company is. U if you're writing an
+8:21
+a a an agent which can uh help you buy
+8:24
+groceries, then that company which is
+8:26
+creating that agent that will be the
+8:28
+organization name here. the capabilities
+8:31
+and so on. Okay. Uh there is this task
+8:34
+object also. So when you are giving a
+8:37
+task to solve it has to be in this
+8:40
+format. Okay. So there are different
+8:42
+specification here. But let me just show
+8:44
+you some sample. So if you scroll
+8:48
+down this is an agent card for Google
+8:51
+maps agent. So that is an agent which
+8:53
+will help you with Google map related
+8:55
+task. So this is the URL. This is the
+8:57
+organization. These are the
+8:59
+capabilities. See, it will have multiple
+9:01
+skills. So, first skill is route
+9:03
+planning. Second skill is custom map and
+9:06
+so on. Then when you send a task, see,
+9:09
+you will say tell me a joke. This is a
+9:11
+different uh task by the way, not
+9:12
+related to Google map. Uh but this is
+9:15
+how you will specify your task and your
+9:17
+response will come here and it is using
+9:20
+JSON RPC as a communication protocol. Uh
+9:23
+and as a data exchange format you are
+9:25
+using JSON. So uh this is not like
+9:28
+replacing HTTP or JSON RPC etc. The A2A
+9:32
+protocol is built on top of HTTP, JSON
+9:37
+RPC
+9:38
+um you know some other protocols, bunch
+9:41
+of other protocols which which I will
+9:42
+talk about in this particular document.
+9:46
+So you can uh read through all these uh
+9:50
+sometimes you need you have streaming
+9:53
+requirements. So you want to communicate
+9:56
+through SSC. So A2A protocol also
+9:58
+supports SSE and this is the example of
+10:02
+that. Let's say you are writing a long
+10:04
+paper. Okay, on some topic now you need
+10:07
+to stream the response. So you can
+10:10
+stream it like this. Okay, this is
+10:11
+section one, section two and so
+10:14
+on. And it supports multimodality as
+10:18
+well. Uh it also supports error
+10:20
+handling. And then here is a nice
+10:22
+article on um A2A versus MCP and the
+10:27
+garage example that I use. I I I got the
+10:31
+inspiration from this. There are a bunch
+10:33
+of diagrams that you can find it useful.
+10:36
+Uh now let me show you
+10:41
+the there is some code as well. So here
+10:45
+there is a code code of an uh agent
+10:48
+which is acting as a server. So it it
+10:50
+will obviously uh display that uh agent
+10:54
+card. So see agent card format is same
+10:56
+as the schema that we saw. It has name,
+10:58
+description, URL, the skills and skills
+11:01
+is an array. So it can have multiple
+11:03
+skills. So one of the skills is let's
+11:05
+say this this is an example of a
+11:08
+reimbursement tool. So your skill is you
+11:12
+can process reimbursement tool. So if
+11:15
+you are an organization which is
+11:16
+building this agentic tool which can
+11:19
+reimburse your expenses then you can use
+11:21
+a A2A protocol and you can build one
+11:24
+agent which is a reimbursement tool.
+11:27
+Okay. So this is just the main server
+11:30
+file. The actual implementation of
+11:33
+reimbursement tool is here. So you will
+11:36
+see a class which is your reimbursement
+11:38
+agent. So this is an agent. An agent
+11:41
+will have some capability. What is that
+11:42
+capability? Well, it uses Gemini 2.0
+11:46
+flash model. It can do this thing. This
+11:49
+is the prompt that it will use to pass
+11:52
+the task over to an LLM. So, it is using
+11:56
+some LLM. It is using tools. Of course,
+11:59
+agents is nothing but LLM plus tools.
+12:02
+Okay. So,
+12:03
+this entire class is nothing but an
+12:07
+agent. But this agent is communicating
+12:11
+with other agents. Okay. It is providing
+12:14
+all these capabilities through the agent
+12:16
+card that I have these capabilities so
+12:19
+that other agents can use this
+12:22
+particular
+12:23
+agent. All right. So I hope you
+12:25
+understand uh now what exactly A2A is.
+12:28
+I'm going to link all these documents
+12:30
+for your detailed understanding. This
+12:32
+was released just yesterday. So uh we'll
+12:36
+have to see you know what kind of impact
+12:38
+this has in the world of AI. It is still
+12:41
+new lot of things are being evolved. So
+12:44
+it it starts a new era for agent
+12:47
+interoperability and it is going to be a
+12:50
+very good development
+12:52
+uh for companies and organizations which
+12:54
+are building this agentic tools. All
+12:57
+right. Thank you very much for watching.
+12:59
+If you have any questions, post in the
+13:01
+comment box below.
+
+Agentic

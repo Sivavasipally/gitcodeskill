@@ -1,0 +1,996 @@
+
+Search in video
+Intro
+0:00
+This video is a complete crash course on LLM fine-tuning where we will start with some theory on what is finetuning. We'll
+0:07
+cover some popular methods such as Laura, Q, Laura, etc. And then we will write code in onslaught to perform
+0:14
+fine-tuning on a sample data set.
+What is Fine Tuning
+0:22
+Let's understand LLM fine tuning in a very simple language. When I moved to US
+0:27
+from India, one of my friends took me to play baseball and I was actually
+0:32
+comfortable playing baseball. Why? Because in India I have already played cricket. Now in both of these games you
+0:38
+have bat ball, you have to track the ball and move your bat run. So whatever
+0:44
+raw skills I had from cricket, I deployed that while playing baseball. Essentially I'm transferring the skills
+0:50
+from one game to another. So in AI there is a term called transfer learning where
+0:55
+you take the model and then you retrain it or you fine-tune it on new data set
+1:02
+task and format. So that is what LLM fine-tuning is. When you look at LLM
+1:07
+such as GPD5, Llama etc. they are trained on a vast amount of internet data. But let's say you are an AI
+1:14
+engineer working in a private company. Let's say you are working for Johnson and Johnson or Reliance Jio and you are
+1:21
+given a task to build a chatbot for your customers that has knowledge of the
+1:27
+internal data of that organization. Also, it should respond in a specific
+1:32
+format, tone, etc. At this time, you will use LLM fine-tuning. So LLM
+1:38
+fine-tuning is a process of retraining the pre-trained model such as llama on a
+1:44
+specific task, data set, tone and format. Let's take an example of an
+1:49
+imaginary company called Loki phones. Uh to understand this thing better, you're building a chatboard for this company
+1:56
+using models such as GPT and Llama. And when your customer ask a question, my
+2:01
+Loki phone 12 screen is cracked. What are my option? The base LLM will give
+2:07
+some general answer right but the right answer in this case is you should use
+2:13
+this locky care plus plan if you already have it now let's say this data is not
+2:18
+available on internet in that case plain LLM will not be able to answer this
+2:24
+there might be other questions okay how long battery last whatever and assume
+2:29
+this is the kind of data which is private to organization and LLM has not seen Right. So using plain LLM it won't
+2:37
+be able to answer. So what you do is you use a simple technique called retrieval
+2:43
+augmented generation. In this technique you point your LLM to external source of
+2:49
+knowledge. Right? It can be a database, PDF files, whatever. This is private
+2:54
+data. It's not available on internet. But when you're building a chatbot internally, you can point it and it will be able to answer it. Okay. Now the
+3:01
+benefit of rag is that you are not retraining the model right so LLM is
+3:06
+nothing but there is a neural network here right there is a neural network which you're training and the network
+3:13
+looks something like this it's a huge network let's say it has 70 billion parameter now what do I mean by
+3:19
+parameter each of these ages have weight let's say this has a weight of 0.8 8 0.7
+3:26
+and how many ages are there? Maybe 40 50 in actual LLM there are 70 billion
+3:32
+parameters that you have to update. So the benefit of rag is that you're not
+3:38
+updating everything and it is very cost effective. Okay. But there are
+3:43
+disadvantages. RAG may not be able to produce the best possible answer in your company's brand
+3:51
+tone and the format that you expect. For example, for this question, rag may produce this answer, but ideally you
+3:59
+want this answer. Similarly, this is the second question. RAG may produce this and but fine-tune model
+4:06
+will produce this. And you'll notice that here there is more empathy. See and
+4:12
+let's say empathy is one of the values of your company that you want your chatboard to follow as well. So overall
+4:22
+fine-tuning gives this benefit that it can handle emotion slang it can answer with brand on and overall it can produce
+4:29
+more precise answers whereas rag has its own set of benefit which is it is low
+4:34
+cost. Okay. So if I have to fully summarize pros and cons then these are
+4:40
+the pros and cons. Okay, you can go over it. Overall, rag is cheap. Finetuning is
+4:45
+expensive, but fine-tuning produces better answer compared to rag. So, what
+4:52
+people do in the industry is they combine both rag and finetuning. Okay, I'm giving you an example of a B LLM
+4:59
+called Lama 3.2. And by the way, you can go to hugging phase and find both of
+5:04
+these models. So, llama 3.21B is a B LLM whereas 3.21 M21B instruct is a
+5:12
+fine-tuned model. So this model is fine- tuned on this particular B LLM and the B
+5:19
+the foundation model is just an autocomplete. Uh you all know right like how how large language model works. The
+5:26
+way it works is you're giving a sentence and it is just doing uh autocomplete of
+5:32
+that sentence. So when I say the capital of India is it will autocomplete Delhi.
+5:39
+Okay. and then it will autocomplete next sentence next next word next word and that's how it produces a big paragraph
+5:45
+as an answer but when you look at the instruct model that is more similar to the response you get in chat GPT you
+5:52
+have a question answer pair okay so summarize this article then it will summarize translate this sentence to
+5:58
+Hindi it will summarize it so this is this fine-tuned model is more like chat GPT more consumable there are two types
+6:05
+of finetuning one is full finetuning where you will retrain in the entire network and it's going to be costly
+6:11
+right you're updating 70 billion 100 billion whatever is the parameters of your LLM you're updating all of them
+6:17
+second one is parameter efficient finetuning and there are two popular methods Laura and Qura here you are not
+6:23
+updating all the layers actually you keep these layers frozen and you add
+6:30
+some new layers on top of it if you know about transfer learning in deep learning
+6:35
+there is a technique called transfer learning where you keep certain layers frozen you don't update them and
+6:40
+you update only some other uh layers. So PFT is similar to that and these are the
+6:46
+two popular methods
+LoRA
+6:52
+we are going to discuss Lora which is low rank adaptation technique. It is one
+6:58
+of the popular fine-tuning techniques for LLM. We have to first think about
+7:04
+the transformer architecture. In transformer architecture, we had all these vkq parameters if you
+7:12
+remember query parameter or key value parameter and so on. And when you're training this model, you are essentially
+7:20
+training the trainable parameters which is represented by these matrices. So if
+7:25
+you remember from our deep learning module we already discussed uh these matrix W Q W K W
+7:35
+and these are again trainable parameters these are the matrices which gets trained when you are training this
+7:41
+particular transformer model and I'm representing one slide here we looked at
+7:46
+this slide previously where we had this WQ which was you know matrix that will
+7:53
+tell you how to Encore query of a token for attention computation. And we had
+7:59
+couple of such matrices. In attention layer, we had WQ, WK, WV, WO will be the
+8:06
+output one. And then in the feed forward layer, we had two matrices. If we
+8:11
+represent all these matrices as W, let's assume we call it W in a generic way.
+8:18
+Then what we do in Laura is we keep this W frozen. So let's say you are using
+8:25
+llama model or GPT model okay and you're fine-tuning it. Now that model will have all these matrices you keep them frozen
+8:32
+you don't change anything into them but you take your training data set on which
+8:38
+you want to fine-tune your model and when you're fine-tuning while you keep W
+8:44
+frozen where you don't change any parameter here you add a new set of
+8:51
+parameters called delt. So you add a new matrix delta W and during the training
+8:58
+you change parameter only here. So this one is frozen. Okay, it's like a box. It's frozen. It doesn't change. But this
+9:05
+delta W will change. This is called parameter efficient finetuning.
+9:13
+Here the whole model is frozen but a small set of trainable parameter is
+9:18
+added to the model. Okay. So this is PFT. Now you might ask how can this save
+9:25
+computation time because we are saying oh parameter efficient finetuning right
+9:30
+um we we could have fine- tuned the entire model where we just change W but we don't want to change it because we
+9:36
+want this process to be efficient but then if you're adding delta W it's the same thing it's in fact more computation
+9:44
+so the question is how does it solve computation problem well in Laura technique we do something really clever.
+9:52
+Let's say you have uh this delta w, right? Which is d by d matrix. Okay. And
+9:59
+delta w is this the new uh trainable parameter that you have added. Okay. So
+10:05
+let's say it's d by d matrix. You decompose that into two matrices. Okay.
+10:11
+A and b. And here we are using this r parameter which is called rank. Okay. So
+10:16
+in lora low rank adaptation. Okay. So this R is this hyperparameter. So if you
+10:23
+multiply these two matrix like 4x2 and 2x4 you will get this particular matrix.
+10:30
+Okay. So let's assume that D parameter is 512. So let's say if you're training
+10:35
+with delta W you will be training these many parameters. The total number of
+10:41
+parameter will be 262,000. But when you decompose it into this A
+10:47
+and B. So this is a dot product by the way. So a dobb you get delta w. Okay. So
+10:52
+when you do that uh and let's say your rank is 8. Okay. So this r once again is
+10:58
+a rank parameter. When you say low rank adaptation r is a rank and this is a
+11:03
+hyperparameter. It can be 2 8 6 there are different values okay that you can
+11:09
+take. I'm just using r 8 as an example value here. So what happens is when r is
+11:15
+8 is the parameters in this one is 4096
+11:20
+parameters in this one is 4096. So total number of trainable parameter is 8192.
+11:27
+So when you're training a model you know when you do back propagation and when you update the weights you are updating
+11:33
+only 8192 parameters whereas in this case you're updating so many parameters.
+11:39
+So this is how you achieve efficiency and this is the crux of low rank
+11:44
+adaptation. The rank parameter can take any values. Uh these are just general
+11:49
+guidelines but as you can see r can be 4 8 16 32 you know it can be any of these
+11:56
+values. I have seen 8 to be the common value 8 or 16 to be the common value.
+12:01
+But once again it's a hyperparameter. Okay. If you look at PFT library from
+12:07
+hugging face which is used for this PFT optimization R is taken as a hyperarameter in a Laura
+12:14
+config. Okay. So here 8 is a common value but based on your data set based on your problem you can play with it and
+12:22
+just see which method works the best. If you're interested in reading the full paper you can just Google Laura paper
+12:29
+and you will find a PDF. So just in case you're curious, you can go through it.
+12:34
+But I I hope you got the crux of it, which is adding delta W parameter and
+12:41
+then decomposing that into A and B individual matrix matrix such that A
+12:47
+dobb is equal to delta W and then total number of parameters that you have to train through A and B will be much
+12:55
+lesser compared to delta W. And in this technique once again you keep your W
+13:01
+which is your original set of parameters frozen. You don't change them. Okay. So computationally this method is very
+13:09
+efficient.
+Quantization Basics
+13:14
+In order to understand the Qura technique you need to first understand quantization. You might know about this
+13:21
+concept from the deep learning module. But let's uh refresh our memories. Let's say you have llama 7B model. 7B means it
+13:29
+has 7 billion parameter and these parameters are nothing but the weights in neural network. Let's say each
+13:35
+parameter takes four bytes or float 32 or 32 bits. These are all are same
+13:42
+things. In that case, this model needs 28 GB of RAM. Like when you're loading
+13:48
+that model in your computer, it needs 28 GB of RAM. If you're talking about 70
+13:54
+billion model, it needs 280 GB of RAM, which is too much memory. Okay, you
+14:00
+can't run it on your local computer. But what if we reduce the size for storing
+14:07
+each parameter? Let's say from four by you go to 8 bits or just one byte. Okay, so 8 bits is one by one by equal to int
+14:17
+8. Okay, int 8 is a data type. In that case it will take only 7 GB of memory.
+14:23
+Here I'm showing you a table where we have this different sizes for bits.
+14:29
+Okay. So if Q is 32 which means 4 by it will take 28 GB this scenario. But if it
+14:37
+is 8 it takes 7 GB. If it is NF4 in 4 which is half bit you know 4 bit it
+14:43
+takes only 3.5 GB and you can run that model locally on your computer. If you
+14:49
+have 70 billion model, you might need multiple GPUs with float 32. But if you
+14:56
+have int 8, you might need only one GPU. You know, you can run it with one GPU or
+15:02
+two GPUs very easily. And this process of reducing the bytes, you know, that it
+15:09
+takes to store one parameter is called quantization. It's a process of converting high precision numbers into
+15:16
+low precision formats to reduce memory and computation requirements by machine
+15:22
+learning models. Now you'll be like when you go from high precision to low precision of course you're losing
+15:27
+accuracy. Well that is true but it has been shown through the experiments that
+15:33
+practically speaking you still get a pretty good accuracy okay for your given use case. And quantization helps
+15:41
+especially with edge devices. Let's say you have a drone which is flying over your field and you are using deep
+15:48
+learning to uh do some kind of uh computer vision type of use case. Then
+15:56
+quantization really helps because you can have quantized model loaded into
+16:01
+your drone. You know drone will not have that much memory. So it will work the
+16:06
+best during the inference time. So contisation is popular when it comes to
+16:11
+edge devices. It is popular in other use cases as well where you need efficiency
+16:17
+when it comes to your computation and memory requirements. So let's see how
+16:22
+quantization works. Let's say you have couple of weights which are float 32.
+16:29
+Okay. And usually these weights are minus1 to 1. So the values of these
+16:34
+weights will be 91 78 okay negative and then 87 28 and so on. So I'm just
+16:43
+showing you some sample weights from a neural network and the scale here is
+16:48
+minus1 to 1. When you quantise this to int2
+16:54
+will take how many what will be the range for in2? Just just tell me you need to have this computer science
+17:00
+fundamentals clear. into means two bits and in two bits we can store four number
+17:07
+minus2 to positive 1. So the way you can quantize this is you can divide your
+17:14
+float 32 range into four equal beans. Okay, four equal beans and just map them
+17:21
+to these four bits. So these values 91 78 will become -2 39 will become
+17:30
+negative 1. any values uh that comes into this bin will become negative one. Okay. So it is sort of like scaling but
+17:38
+scaling with rounding and some other difference. Okay. So the values you had for weights minus 91 minus 78 and so on
+17:48
+after quantization will become this. Okay. So it's a pretty simple concept.
+17:54
+What will happen if you are quantizing to int 8? Well, once again, what is the
+17:59
+range for int 8? Int 8 means 8 bits and 8 bits can store values from - 128 to
+18:08
+positive 127. So, you divide once again this range into total 255 bins and you
+18:17
+just map them and let's say you call your original values x and you call your
+18:23
+quantise values q. Okay, so there is a mathematical formula to perform
+18:28
+quantization. The first thing you need to do is find out the scale. Again, this is like you have learned scaling in
+18:36
+machine learning, right? This is similar to that you're scaling values from one range to another range. So you first
+18:42
+find scale by saying x maxx minus x minax minus q min. So x max is 1, x min
+18:51
+is min -1, q max is 127, q min is min - 128. So you put all those values here
+18:57
+and you get a scale of 0.78. Now to get quantized values, you use
+19:05
+this formula. Okay, this is a standard formula. So you have your x values minus
+19:10
+0 point which means what is the value where you want to center your points. In our case, let's say this is zero. Okay.
+19:16
+So this zero point will be zero. X will be all these values and scale will be
+19:22
+scale. Okay. So for one of the values let's say for this.91
+19:27
+value uh 0 is 0 then scale is this when
+19:32
+you round it you will get -16. So you map this value to -16. Once
+19:40
+again, it's a concept similar to scaling with some differences where you have
+19:45
+bunch of values. You're mapping it to limited range of integers. Okay, see
+19:51
+when we were doing scaling in machine learning module, the scaled value will still be a float. So you are not saving
+19:58
+any term anything in terms of memory. But here the scale value is integer. So
+20:03
+you are mapping this float to integer through this formula and that will give you this memory saving. So I have this
+20:11
+Jupyter notebook where I'm creating some 100 random values in range minus1 to 1.
+20:18
+Okay. So let's say these values look something like this. Now I'm using the
+20:23
+same scale formula that we saw previously. Max X - Min X q max - Q q
+20:29
+min and scale is going to be 0.0078 0 078. Okay. Now my 0 point is 0ore
+20:37
+point is 0. And for quantization I'm using that same formula. X - 0 point.
+20:44
+Okay. X -0 point here. Divide by scale. And you round it to an integer. And then
+20:50
+you clip the values to Q min and Q max. You don't want your values to go beyond
+20:56
+minus 128 and + 127. And when you apply this formula, you get
+21:03
+q values for your x values. So for your x values, which are these first 10
+21:08
+values, the first 10 q values will be this. So see we mapped -1
+21:16
+to - 128 then uh - 9797 whatever to -25
+21:25
+and so on. And to do dequantization which is from these values let's say I
+21:32
+want to get these values back right because you have to do that to do that you will just use this formula it's a
+21:38
+reverse of quantization okay so this formula should be pretty straightforward folks scale into Q -0 point and you get
+21:45
+these values back so this minus1 value you got it back as -10039
+21:52
+so there will be some loss of precision you understand that right it's like when you zip your data, unzip it. There is
+21:58
+some loss. Similarly, here there is some loss. So, -0.979, you got it back as -0.98, but it's not
+22:06
+too bad, right? See -0.818, you got -01.815.
+22:12
+So, it's not too bad. You save a lot of memory and you get similar accuracy.
+22:17
+There'll be some drop in the accuracy, but for your practical use case, it will mostly work. Okay? And this is how you
+22:26
+plot it on the chart. Let's now look at normal float NF4 quantization. We
+22:34
+previously saw that when you have in two possible values are four. Okay. -2, -1, 0, 1. Total possible four values. So you
+22:42
+create four bins and you map it. Okay. What happens if instead of in two you
+22:47
+have int four in in four? How many possible values are there? Folks, use your computer science fundamentals.
+22:53
+Pause this video and tell me how many possible values are there. Well, total possible values will be 16 -
+23:02
+8 to positive 7. See minus 8 will be this. Okay, this is a bit representation where this bit is a sign. So sine one
+23:11
+one bit means negative and 0 0 then 1 and 11 1 is - 7 and so on. So you
+23:19
+create 16 bins and map them. Okay, this is a linear mapping. You create 16 equal
+23:26
+bins and map it. But this will create problems when we use quantization for
+23:32
+our neural network especially for LLM because our weights you know all these weights let's say you take that neural
+23:38
+network and you take all the weights and if you plot a distribution it will be a
+23:43
+normal distribution. So if it's a normal distribution majority of the values are centered around zero and when you are
+23:51
+using regular info you are creating equal bins correct equal uh equally
+23:56
+spaced bins and due to this what will happen is majority of these values will
+24:02
+be mapped to one value right like like these values let's say this is this
+24:08
+value is let's say 30% of total values okay I I don't know the exact number but
+24:14
+let's assume let's say this is 30%. And let's say this is 20% of the total values and this is 20%.
+24:22
+So then all these values are being mapped to single value. Let's say this
+24:27
+is min -2 this is minus1 0 I think 0 1 2 3 4 5 6 7 Okay. So
+24:36
+majority of the values are being mapped to minus1 and one. And when you do dequantization you will lose lot of
+24:42
+precision. So this is not a good approach right for a normal distribution creating equal bins will not work. So
+24:49
+folks please pause this video and tell me an idea which will work the best for
+24:54
+this scenario. I'm telling you it's a common sense. Okay you have to just
+25:00
+apply common sense. Pause this video and tell me how do you change this so that there is an equal mapping. All right. I
+25:06
+hope you found the correct answer. The answer is you will not create equal bins. You will create bins based on the
+25:14
+percentage of data points in your histogram. So uh this total number of data points you have is 100% right and
+25:22
+if you divide that by 16 you get 6.25%. So you want 6.25%
+25:30
+in each bin and you will design that bin accordingly. Okay. So here since in this
+25:36
+histogram there are more number of data points the width of the bin is lower. Okay. So if this is zero value this will
+25:43
+might be 0 to let's say 0.005
+25:48
+let's assume that this is 0 this is 1 and this is minus one. So then this bin
+25:53
+will be 0 to 0 let's say 1 then 01 to 05
+26:02
+and so on. So you create these beans in such a way that the data points let's
+26:09
+say these the data points right like so so if you look at this particular area this should be 6.25%.
+26:17
+If you look at this particular area this should be 6.25%.
+26:25
+Okay, let's uh look at uh the coding so that you get an idea and this is called
+26:32
+normal float 4, right? Like normal normal for normal distribution. So this
+26:38
+is NF4 quantization. Let's look at the code now. So in the code what we're doing here is X is we are just creating
+26:45
+100 data points. Okay, 100 random data points between minus1 to one range.
+26:51
+Let's say these are your weights of your neural network and these NF4 values are
+26:56
+16 values. Okay. So these values are min -0.01 to -0.05.
+27:02
+So the distance between these two is 04 and then from here to here the distance
+27:10
+is 05. See distance will increase. You see in this chart this distance okay this
+27:16
+distance right here is how much? 04. Okay. So
+27:24
+04. But the distance between the the width
+27:29
+for the second bean. Okay. Second bean is what is this? If you add 05 into
+27:37
+this, you get 0.1. So this distance is
+27:42
+0.5. So it will increase. then the distance or the width for the third bin will be
+27:49
+even higher. So 0.1 to 2 is 0.1 see.1. [Music]
+27:55
+So you realize like when you increase that width you can accumulate more data points because of this normal
+28:01
+distribution we need to do that and these values are kind of fixed. Okay, if
+28:07
+you use some ready Python library like bits and bytes, you will get a better
+28:12
+values. But this is a rough approximation. So now let's quantize it. So what you're doing essentially is once
+28:19
+again very simple. You are mapping all these data points to nearby value. So
+28:25
+what is a nearby value for minus one? This. So you'll map it to this. What is more nearby to -0.97?
+28:33
+Is it minus1 or 75? Well, it's minus one. So, you will map this value to
+28:39
+here. Okay. And what is most nearby to
+28:45
+this? Is it minus.75 or minus one? Just not this. 87 again minus one. But if you
+28:53
+look at minus.85, it is more near to this. So, these three values will be
+28:59
+mapped to -0.75. These four values will be mapped to minus 1.0. You are just mapping it to
+29:06
+nearby value. Very simple logic. And we have this Python function. And when you
+29:11
+quantize it, see you'll get this. See all these values are mapped to minus one. Last three values are mapped to
+29:20
+point minus 75 because it's it's more closer to it. Okay. And uh this is how
+29:26
+the distribution looks like.
+QLoRA
+29:33
+Q Laura is essentially the quantized version of Lora technique. Let's
+29:38
+understand how this works. Say you are fine-tuning an LLM with with 65 billion
+29:45
+parameter. Now if this is using flow 32, it will take 260 GB of memory to load
+29:51
+the model. You will first quantise this using let's say an F4 quantization. And
+29:57
+the quantized model will have a size of 32.5GB because for each parameter is it
+30:03
+is taking half a bite. So for 65 it will be 32.5. And then you apply Lora
+30:09
+finetuning using your domain specific data set. This is what QRA is. It has
+30:15
+few other elements as well. But just to go over definition of culera, it's a
+30:20
+memory efficient fine-tuning method that combines 4bit quantization with low rank
+30:26
+adaptation. Now other than NF4 quantization, it uses a concept of
+30:32
+double quantization and also page optimizers. If you look at their
+30:37
+research paper in the abstract itself, they talk about all these three points
+30:44
+which is 4bit, normal float contisation, double contisation and page optimizer.
+30:49
+So we already looked at NF4 contisation. Let's look at what is double quantization. This is like zipping a
+30:56
+file once again. So you zip a file, you get a smaller version, then you again
+31:01
+zip it, you get even a smaller version. So same thing we do here. So let's say you have 7 billion parameter model to
+31:09
+quantise it usually you don't take all the parameters and quantize it in one shot. You will create a block of 64
+31:17
+parameters. So you have all these 7 billion parameters. Okay. You create a group of 64 billion parameters and you
+31:25
+will get n number of blocks. I think 109 million blocks in this case and then you
+31:31
+apply quantization. Okay NF4 quantization. So each of these blocks
+31:36
+will have less size and they will have their own individual scale values. If
+31:41
+you remember quantization formula there was scale and there was zero point.
+31:47
+Okay. So for doing blockwise quantization each block will have
+31:52
+different scale. So this scale one will be different than scale two and so on. It will also have a different zero
+31:58
+point. Now the people who wrote Qura paper thought that okay we got some
+32:03
+optimization here but the scales are still float 32 right the scale is
+32:09
+floating point number in our case it was 0.78 something it is still a floating point
+32:15
+number and you have so many such numbers in this case 7 billion parameters you will have 109
+32:23
+million blocks I think and for each block you have one scale so 109 million
+32:30
+float 32 numbers. So what if you take all these scales and you quantise them
+32:36
+again. Okay. So that way you also get some reduction in terms of size for the
+32:42
+scale values and zero point values. Okay. So it's a simple concept just like zipping a file which is already zipped.
+32:49
+Okay. So quantization you're doing and then you are doing quantization again on the scale etc. The third element of Qura
+32:58
+is paged optimizers. So what happens is when you are fine-tuning this model usually you'll use GPU. So on GPU let's
+33:07
+say finetuning is going on sometimes it may run out of memory. So you will use
+33:12
+this paging concept similar to you know how paging works uh in terms of operating system. There is a page of
+33:19
+memory which will be swapped in swap out of CPU memory back to disk and disk to
+33:24
+CPU memory or RAM. We use similar concept here. So when GPU is going out of memory, some of the pages that it has
+33:31
+will be swapped out to CPU memory or RAM and then they will be swept back in
+33:37
+whenever needed. So these are the three key elements of Qura technique and I
+33:43
+have the research paper open here. As you can see, you can finetune 65 billion
+33:49
+parameter model on a single 48GB GPU. So you realize it see if 65 billion
+33:56
+parameter with float 32 that multiplied by 4. So 280 GB whatever it will be that
+34:02
+huge number. So I have a Qura paper open here and here it says that uh a 65
+34:10
+billion parameter model can be trained on a single 48GB GPU. This is humongous
+34:16
+because 65 billion parameter model is around 260 GB and if you can uh
+34:24
+fine-tune that heavy model on a single GPU with 48 GB RAM then that's really
+34:30
+amazing. Okay, I'm going to link this research paper. You can read it if you want to go into the details.
+Fine Tuning Llama with Unsloth
+34:41
+We will use this onslaught library which is very popular when it comes to LLM fine-tuning and they have this nice
+34:48
+documentation which you can use to get help on API etc. To install it you will
+34:54
+use pip install unslo on your computer. Now to finetune you need GPU on your
+35:02
+computer. So if your computer has GPU you can do it locally but I prefer doing
+35:07
+this in cloud because in cloud you can get access to GPU as well as some of the
+35:13
+dependency errors that I was getting while I was running locally. I did not get on cloud. So I will start with
+35:21
+collab. Okay. So collab.resarch.google.com google.com create a new notebook and then connect
+35:30
+it with a GPU instance. So by default this is connected to CPU. You can just
+35:35
+say change runtime type T4. So this is giving you an access of Tesla T4 GPU
+35:42
+which is not very powerful but good enough for our practical demonstration.
+35:49
+If you have a paid account and if you can get access to higherend GPU then that's even better. I will demonstrate
+35:56
+uh this entire thing through a pre-built notebook because running this code takes
+36:01
+lot of time. Okay. So I have already executed this notebook and I'll walk over it. So in a collab notebook you
+36:08
+first need to install onslaught library. Okay. Uh because when you connect with
+36:15
+the collab environment uh it starts fresh. So you can't just install it and save it. You have to install it. Okay.
+36:22
+So in your cell just run this after you have connected with that GPU uh instance
+36:29
+and then you will import fast language model class from
+36:35
+unsllo. Okay. You'll also import pytorch which is torch. And here you are
+36:41
+defining bunch of parameters. And at this point you are getting a pre-trained
+36:48
+model. So here we are fine-tuning llama model llama 3.2 3b instruct. This is the
+36:55
+model we are fine-tuning. So you specify that. Then max sequence length is your
+37:02
+context window length. Okay. How much longer sequence you want to support in your finetune model. DT type none means
+37:10
+let GPU figure out what kind of DT type will be the best. And by the way, I have provided help on all these parameters.
+37:18
+See, it specifies the data type of model weights and computation. If you have
+37:23
+something like Nvidia 800 GPU, then it will use this torch.bloat
+37:29
+16. Okay. So when you say d type none it will figure out the correct uh type for
+37:35
+the storage and load in 4 bit is used for 4bit quantization. Okay. So we are
+37:43
+going to use 4bit quantization here and when you run it it will download a bunch
+37:49
+of stuff because it is downloading this model uh and it is loading that model into
+37:55
+this model parameter. You also get this tokenizer variable. If
+38:01
+you look at this syntax, this looks similar to the hugging face transformer library syntax where you say library
+38:08
+class dot from pre-train you load the model. Okay. So now I have llama model
+38:14
+here in this model variable and I will fine-tune that. Okay. You also need this tokenizer. Okay. So as a next step what
+38:22
+you do is you get the parameter efficient finetune model get PFT model.
+38:29
+So here you are defining your parameters for Laura. So what do you need? Rank.
+38:35
+Okay. Rank I'm specifying as 16. You can also try 8 32 etc. It's a
+38:42
+hyperparameter folks. So I'm starting with 16 but you can start with 8 32. Play with it. Then for target modules Q
+38:50
+proj V proj and O proj refers to those
+38:55
+uh remember those matrices you remember these in a
+39:00
+attention layer you will have these four matrix in feed forward layer you will have two matrix W1 W2 and and and you'll
+39:07
+have few more in the output uh layer as well so that's what it is Q pro is for
+39:14
+that uh WQ mat matrix then wk vk etc.
+39:21
+Now let's say if you don't specify this parameter then it will not add that
+39:26
+extra adapter that extra delta W after that particular matrix. Okay. Now since
+39:33
+I have all these matrix uh defined what it will do is see you will have wq and
+39:39
+plus it will add delta w right like delta w to this then since I have w kro
+39:47
+defined it will have w k plus delta w k something like that okay so wherever you
+39:55
+want to modify those matrices you will add this parameter so let's say if I
+40:00
+don't add k approach Okay. So if I don't add that, it will use WK original as a
+40:07
+frozen layer. It will not add that adapter. I hope you're getting this point. This is coming from our Laura
+40:13
+lecture that we already uh discussed before. Okay. And these are the matrices
+40:19
+from the fully connected layer. Then we have Laura alpha. So this Laura alpha is
+40:26
+this particular alpha. See your equation is w0 which is original weight matrix
+40:32
+plus delta w. So a dobb is your delta w but you don't just do delta w you add
+40:38
+some scaling parameter. So that is alpha divide by rank. Okay. And that alpha is
+40:44
+this lower alpha parameter that you're specifying. This will tell you how much
+40:50
+uh that adapter contributes to your weight update because this w0
+40:57
+is same as w that we have discussed before. This w is not changing. It's a frozen layer. What is changing is this a
+41:03
+do.b which is delta w. Correct. But how much delta w contributes to the final
+41:10
+weights? You can configure that through this scaling parameter. Okay. So that's
+41:15
+what this lora alpha is. Then you have dropout. Dropout is for regularization. So while you are doing training, if you
+41:22
+remember from our neural network lecture, if you want to drop certain neurons to kind of address overfitting,
+41:29
+then you can specify that. In in our case, we are not going to have any dropout. We'll just say zero. Then this
+41:36
+bias. Okay. So I have given the information on all these parameters here. Okay. random state uh all of that.
+41:45
+So here you are defining your Laura model your parameter efficient fine-tune
+41:52
+model. So you loaded llama 3 model then you defined all these parameters for
+41:59
+your lura okay like r and lora alpha and so on and now you got this new model
+42:06
+which is uh having all those lora parameters as a next step you will
+42:12
+download the data set on which you want to fine-tune your model so here we are using service now r1 distill sft data
+42:21
+set And this data set library by the way it is a hugging face library. It allows you to access so many different data
+42:29
+sets. I'm on hugging face website right now and I have this service now R1 dist,000
+42:39
+rows and each row is sort of like a you have a problem and you have solution. So
+42:44
+see this is a problem. It's like a puzzle for Halloween S receive 66 pieces whatever this is like a puzzle and this
+42:52
+is the solution. So you want to fine-tune your model on all these
+42:57
+puzzles and you want to fine-tune it in a way that it will do reasoning similar
+43:03
+to your deepseek model. Okay. And for that see these are the two main columns
+43:09
+in your data set right problem and this is the solution. And in solution, Sara ate nine pieces of candy. See, the
+43:17
+solution is this descriptive answer, but the actual number that you're looking at is nine. Okay? And other than these two
+43:25
+columns, you have third column, which is reanotated assistant content. And this
+43:32
+is a reasoning. This is like a think you know that think prompt that you get in
+43:38
+deepseek. So if you want to solve this problem, this is how you will do reasoning step
+43:44
+by step. You will say first I need to determine total number of pieces candy whatever next I will do this. This is
+43:50
+sort of like how humans think right like when you are given a puzzle first you will do this first step second step
+43:55
+third step and so on. And that's what this column is and at the end there is
+44:01
+this final answer. Now in case you are wondering what is this slashbox
+44:08
+9/ etc. Well this is the latte latte markup language. Okay. So let me just
+44:16
+show you the it call latex but latte uh is how you
+44:22
+pronounce it. And this markup language okay what it does is it people use it
+44:31
+for in academia for scientific publications etc. So let me just show
+44:37
+you let's say you are having a research paper and you want to have all these
+44:43
+mathematical equation etc. For that you will use this latte package. Okay. So
+44:49
+it's like SL document SL usage. This is a markup language. Okay. Folks, I I hope
+44:54
+you're getting what I mean by markup language and see LST listing. So, it has its own syntax. If you want to learn
+45:01
+about it, you can go to YouTube, you'll find some latte uh videos, but I don't
+45:07
+think it's needed. It just in in your brain like you need to think that okay,
+45:12
+this is some kind of markup language used uh in this particular data set.
+45:17
+Okay. So, this is a data set. Now you load that data set here through
+45:25
+transformer data set library. Okay. So after the data set is loaded, we will
+45:31
+look at the few records and see it has a problem. It has a solution. It has an
+45:38
+answer. See problem. There were 27 boys, 35 girls. Remember in high school days
+45:43
+and college days, you used to get all these problems. There were fill in the
+45:49
+blank children on the playground. So there's a problem. There's a solution. Solution is usually in that boxed
+45:56
+parameter. Okay. So solution will be here somewhere. And
+46:02
+there is this uh reasoning pattern. Now you take all those uh records. So
+46:10
+there are 172,000 uh records in our data set that we will
+46:16
+use for fine-tuning. In this particular code, what we are doing is we take each of those records
+46:23
+and you put it in this prompt. So you're saying you are a reflective assistant blah blah blah engaging iterative
+46:30
+reasoning uh mimicking human stream of your your approach emphasis
+46:36
+exploration/doubt whatever. So you give this uh prompt then here's a problem. So
+46:42
+there are three brackets right. So this is a problem. Okay. So you you go through see you have a data set right?
+46:48
+So you go through each record when you say dot map this dot map function will go through each record one by one. For
+46:56
+each record this function is called. Okay. And and in every record what you have problem solution and deepse like
+47:04
+stepby-step thinking block. Okay, for them what you do is you take R1 prompt
+47:11
+and R1 has these three parameters, right? So when you do format it will in first block it will first put
+47:19
+problem then in the second one it will put thought. Third it will put solution.
+47:25
+Okay and it will return you the text. So for each of the records just imagine
+47:30
+you're getting this big prompt for each of the puzzle you have.
+47:36
+After that what happens is you're creating a trainer object. Now trainer object is coming from transformer
+47:44
+reinforcement learning library which is once again hugging face. Okay. So this
+47:49
+is the library folks. It's a hugging face library. Transformer reinforcement learning library. And when you did paper
+47:56
+install on sloth it it kind of installed all these because these are the dependencies.
+48:02
+So in that library there is this sft trainer. Okay, like supervised fine-tuned uh training trainer which you
+48:11
+are importing and you are giving the base model that Laura model. Okay, then
+48:19
+see the the model is not trained yet. Okay, you have just defined the configuration. So this model has that
+48:24
+Laura configuration that we gave here. See this this particular configuration. So it knows what is the value of R, what
+48:31
+is R, Laura alpha and so on. then you will use the data set and tokenizer. So
+48:37
+when you run the training see later on I will say trainer train. So when I do
+48:43
+that it will use this tokenizer for tokenizing. It will use this data set to
+48:49
+load the record and to train the model. Okay. So these are all the parameters.
+48:54
+These are training arguments and these are some of these are familiar to you when you looked into the deep learning
+49:01
+module. We had all this learning parameter, learning rate, weight, deck,
+49:08
+all of those. Okay, like optimizer. So, Adam is optimizer here. And I have given
+49:14
+information on all those parameters here folks. Read through it. You don't need to remember the syntax here. You can get
+49:20
+the syntax through chat GPT or through the onslaught documentation. So, don't stress too much. Okay? Like right now,
+49:27
+you might be thinking, oh, this guy is just showing the code and he's not typing. Well, typing is not needed
+49:32
+nowadays in the world of AI. It's like how you make use of those AI tools and
+49:38
+make yourself productive while still learning the fundamentals. That is the entire uh goal that we need to have.
+49:46
+Okay. So, you created this trainer object and then you will do trainer.train.
+49:53
+It will take long time folks. For me, I think it took like 20 minutes and it is
+49:59
+showing you the epochs and the training loss and as you can see the loss is reducing which is a good sign which
+50:05
+means my model is training in a right direction and after
+50:11
+60 epochs my loss is 48. So I read somewhere in the documentation if it is
+50:17
+less than.5 it's good enough. uh I mean it actually
+50:22
+depends on your use case but that's a general guideline and then you will try some prompt so my
+50:31
+model is trained okay after that that line when you say trainer train model is trained which means model is fine- tuned
+50:38
+so we took lama 3 model we trained it on that service now R1 data set okay which
+50:46
+data set this data set 172,000 And that llama 3 model was not
+50:53
+originally trained to think like this to think like deepseek you know like step
+51:00
+by step but now that we fine-tuned it the model will also start thinking like
+51:06
+deepsek okay so here I'm giving one sample uh question how many hours are present
+51:14
+in strawberry and folks this might look like a simple problem actually llm gets
+51:19
+confused with these problems. Okay, so it's kind of like a hard problem for LLM. So I give this uh problem uh
+51:29
+statement to my model. Okay, and here you are doing tokenizer whatever the
+51:36
+basic setup essentially. And then here is where you are doing inference. So
+51:41
+you'll say model generate okay um whatever all these parameters
+51:47
+temperature and so on and whatever output you get you will decode it into a
+51:53
+response. So here if you look at the response let me just show you the response.
+52:01
+See now it is thinking step by step. Let me recap. See let me recap. So it is
+52:08
+actually thinking step by step. It is saying that okay um
+52:14
+you know it goes through the entire sentence letter by letter and is saying okay r is one here r is one and so on.
+52:22
+So it it is is also doing double check because in our uh prompt we asked it to
+52:28
+do human like thinking and then in the end it will tell you total r2.
+52:36
+Okay, isn't this amazing folks? We train the model. We fine-tune it on this
+52:42
+service now R1 data set and llama 3 which was not originally designed to
+52:48
+produce output in this format. Now it is able to do reasoning. Okay, you can run
+52:54
+this in Google Collab is going to take long time. Um the code is attached. So
+52:59
+folks please read through the code once again. Let me remind you I know I'm saying this again and again. You don't
+53:06
+need to remember syntax folks. If you waste your mental energy in remembering syntax, you are not doing yourself any
+53:12
+good. You can get all this help through chat GPT AI and API documentation. Your
+53:18
+goal is to remember fundamentals. Okay. And connect those fundamentals on how do
+53:24
+you solve a business problem. All right. So that's about it. Uh the code is
+53:30
+provided. Please run it in your collab notebook and uh see how it goes.
+53:37
+[Music]

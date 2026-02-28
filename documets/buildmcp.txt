@@ -1,0 +1,560 @@
+0:00
+In this video, we are going to build a
+0:02
+beginnerfriendly first MCP server for a
+0:06
+reall life use case of my company ATL
+0:09
+technologies. Here is my team and we
+0:12
+have this person who is an HR manager.
+0:14
+Her name is Yupta and for Yupta we want
+0:17
+to build this HR agent which can help
+0:20
+her in the employee le management. So
+0:23
+the server is going to look something
+0:25
+like this. We have ATL employees
+0:28
+database where you have information on
+0:30
+their leaves, leaves history and so on.
+0:33
+And we are going to build an MCP server
+0:37
+which will access this database. Okay.
+0:41
+And then we will have an MCP client. Now
+0:45
+usually for MCP client I would want
+0:48
+something like you know an ATL chat GPT
+0:53
+an ATL internal chatbot which is an HR
+0:56
+assistant to our HR manager which can
+0:59
+help her do the leave management. But
+1:02
+since we don't want this to be like 2our
+1:05
+long tutorial what I'm going to do is I
+1:08
+will use a generic MCB client called
+1:12
+claude desktop. Okay. And then this
+1:16
+client will make a call to our MCP
+1:20
+server that we are building right now.
+1:22
+So it's a very simple architecture.
+1:25
+Let's install couple of things. So just
+1:28
+Google uh install cloud desktop. So
+1:32
+you'll click on whatever is your OS and
+1:34
+you will install that. So that's pretty
+1:37
+selfexplanatory.
+1:38
+The other thing you're going to do is
+1:41
+install this particular MCP Python SDK.
+1:45
+So in your command prompt, just run pip
+1:47
+install MCP to install that. Okay, pip
+1:50
+install MCP. And then go to your PyCharm
+1:55
+or whatever is your editor. And here we
+2:00
+are going to use something called UV.
+2:02
+Okay, so UV is a Python package manager.
+2:05
+We will use that to set up our project.
+2:09
+For this, we have this particular
+2:12
+documentation. Okay. So, pip install UV.
+2:16
+So, I'm going to do pip install UV or on
+2:20
+Windows, you can even run this command.
+2:22
+See, so if you copy paste this command
+2:25
+and uh run on Windows command
+2:29
+prompt, it will work. So, I installed it
+2:31
+through Windows command prompt. U I
+2:34
+think it should be very u common sense
+2:37
+thing you know to install software
+2:39
+nowadays. So I'm hoping you will have
+2:41
+success installing UV. Now I'm in this
+2:44
+directory CC code course geni where I
+2:47
+will uh build this directory. So you can
+2:49
+just say uv init my first mcp server and
+2:58
+it will initialize that.
+3:01
+Then you can
+3:02
+just go to that directory and you will
+3:05
+see all these files. Okay. So I have
+3:08
+PyCharm code editor here and you can see
+3:12
+that we have my first MCP server and if
+3:15
+you look at it it has main file it has
+3:18
+this project toml file it has read MD it
+3:22
+just created a basic skeleadon. Now you
+3:24
+go to this page pipi.org or project MCP
+3:28
+where you will see the basic help. So
+3:31
+here they have created this basic server
+3:34
+which can do the addition of these two
+3:36
+numbers. Now what you can do you can
+3:38
+give this code to chat GPT and ask chat
+3:42
+GPT to generate the code for this leave
+3:45
+management. Folks we live in an era
+3:48
+where you have to use AI to generate
+3:50
+code that will make you more productive.
+3:52
+So that's what I did folks. I took that
+3:54
+code gave it to chat GPT and asked it to
+3:58
+create MCP server for leave management
+4:02
+and see it created this particular
+4:04
+server for me and I kind of then gave
+4:08
+some further prompts made some changes
+4:11
+and my server is kind of ready. So I'm
+4:13
+just going to copy paste this code here.
+4:17
+Okay. So in this code as you can
+4:20
+see the way it works is you will import
+4:24
+this fast MCP class from this module and
+4:28
+you will use a mock data. So I'm not
+4:31
+going to connect it with my real
+4:33
+database. I have this mock database
+4:36
+where I have only two employees. Okay,
+4:38
+employee one and employee two. Employee
+4:39
+one has 18 leaves and these are the
+4:41
+leaves he has already taken. Employee 2
+4:45
+has 20 leaves four weeks and she has not
+4:48
+taken any leaves so far. You can create
+4:51
+MCP server by creating an object of this
+4:54
+class and then these are the tools that
+4:56
+you can create. So remember that in MCP
+4:59
+server you can have tools, resources and
+5:02
+prompts. Here we are going to have
+5:04
+mainly tools. Okay. So this tool if I
+5:08
+can uh maximize the code here will give
+5:12
+you a leave balance. So you pass in an
+5:15
+employee ID and all it is doing is see
+5:17
+dot get will get that particular key
+5:20
+from that dictionary and you will get
+5:22
+this object. Okay. And from this object
+5:25
+you will get the balance. So it will say
+5:27
+okay employee ID E001 has 18 days leave
+5:30
+left. Similarly, if you want to apply
+5:33
+for a leave, it will apply for the
+5:36
+leave. It will also take leave dates.
+5:38
+You can see this instruction. By the
+5:40
+way, this dock string is very very
+5:42
+useful. It is very important. So, make
+5:44
+sure you are writing a very detailed doc
+5:48
+string here because it will guide LLM.
+5:50
+It will guide MCP client to make a
+5:53
+particular function call. Okay. Uh then
+5:56
+you have a get leave history. So for
+5:58
+employee ID 001 let's say you want to
+6:00
+know okay these are the two days that
+6:03
+they have taken a leave you can do that
+6:06
+and the last uh one is a resource it's
+6:09
+just a greeting okay it will say hello
+6:11
+whatever how can I help you etc and then
+6:14
+you can run it through uh this if you
+6:17
+want to right click and run the server
+6:19
+through here you can do it but we are
+6:21
+going to run it little differently so
+6:23
+even if you don't have this I think it
+6:26
+should work okay so So this code is very
+6:29
+simple. It's your first server. I want
+6:31
+to give you an experience of how this
+6:33
+thing works. So we are not designing
+6:35
+like 10,000 lines of code here. Okay. So
+6:37
+I hope you get it. Now the server code
+6:40
+is ready. As a next step, you will run
+6:42
+this command. So in your directory, you
+6:44
+will say
+6:46
+ubmcp install main.py. See this main.py
+6:50
+is my file name. When you do that, see,
+6:53
+let me run it. What it will do? Okay. So
+6:56
+see when you did that what it did is
+7:01
+successfully installed live manager in
+7:05
+cl.py claude config. Okay so it added
+7:08
+this server or it installed this server
+7:12
+in my cloud config. Okay so what is my
+7:15
+claude? So I already installed cloud
+7:17
+desktop. Okay. So let's run cloud
+7:20
+desktop now. So I'm going to open it. So
+7:23
+I'm going to open the cloud desktop and
+7:25
+it is initializing that server and you
+7:27
+can see in this it has all these three
+7:31
+tools. Now there could be a reason where
+7:34
+you don't see these tools and for that
+7:37
+what you need to do is here somewhere
+7:39
+you will see an option to enable
+7:41
+developer mode. So you have to do that.
+7:43
+Okay. So enable the developer mode. I
+7:45
+think it's one of the option here. I
+7:47
+have already enabled it. So I'm not
+7:49
+seeing it. So just go figure out once
+7:52
+you have enabled the developer mode what
+7:55
+you can do is you can go to file
+7:59
+settings and in the settings you will
+8:01
+see this developer and see I'm seeing
+8:03
+this li manager tab and when you say
+8:05
+edit config you will see this JSON file
+8:09
+you can open this file here okay and in
+8:13
+this file I see my leu manager so when I
+8:16
+ran that command uv whatever u install
+8:19
+call this particular command. It
+8:21
+actually added this entry into my cloud
+8:25
+desktop configuration. So my cloud
+8:27
+desktop now knows that it has an MCP
+8:30
+server called leave manager and to run
+8:34
+that it has to use UV command. UV is
+8:37
+already installed on my computer. Okay,
+8:38
+UV is a Python project manager and you
+8:42
+have to run it with this particular
+8:43
+command and this is the file. Okay. So
+8:46
+when cloud desktop starts, it will
+8:48
+notice this configuration and it will
+8:52
+internally start this particular MCP
+8:55
+server. So going back to our diagram
+8:59
+here, what happens now is this MCP
+9:02
+client which is my cloud desktop has an
+9:06
+access to that particular config file
+9:09
+right where it says MCP servers. So it
+9:14
+has access to this whatever my leu
+9:17
+manager server okay and leu manager
+9:19
+server is running here. So now when I
+9:22
+ask a question into this it will be able
+9:24
+to pull the information from atlake
+9:27
+database. Now all the tools which are
+9:29
+available. Okay. So if you look at my
+9:32
+code I have how many tools? So this is
+9:34
+my first tool. Second tool which is
+9:37
+apply. Third tool is get leave history.
+9:40
+So those tools are visible here. So if
+9:43
+you look at this tools icon you see get
+9:46
+leave, apply leave, everything is
+9:48
+visible here. Now sometimes people may
+9:52
+face issues with installation etc. And I
+9:55
+was also facing one issue with the typer
+9:57
+library. So if you are getting any type
+9:59
+str error etc. Just say pep install
+10:04
+upgrade typer and after that that error
+10:06
+will go away and you will be able to see
+10:10
+all these tools here. Okay. So now let
+10:12
+me ask some questions. So let's say I'm
+10:15
+an HR manager at ATL and I want to know
+10:19
+how many leaves are available
+10:23
+for employee E001. So when I do that the
+10:28
+claw desktop is smart and it knows that
+10:31
+this is not a generic internet question
+10:33
+and I need to call available tool and it
+10:36
+figured out that I need to call this get
+10:40
+le balance. You see get leave balance it
+10:43
+figured it out because it's a language
+10:45
+model plot 3.7 is a language model it
+10:48
+knows how to map user question which is
+10:52
+this to an appropriate function which is
+10:54
+get l balance and also supply
+10:57
+appropriate argument. So when I say e001
+11:00
+it will supply that as an argument to
+11:03
+this particular function employee ID and
+11:05
+it is telling me 18 days. See E001 has
+11:09
+18 days. I can also say for this same
+11:13
+person let me know the exit dates when
+11:19
+they
+11:21
+took the leave. So see you are asking
+11:24
+question as if atlic HR a human will ask
+11:28
+these questions and it will understand
+11:29
+see it has a context when I say same
+11:31
+person it knows I'm talking about
+11:34
+E001 and for that person it is going to
+11:38
+take uh see it's so smart it says they
+11:42
+took a leave on Christmas day and
+11:44
+January 1st and if you look at this see
+11:47
+this is a Christmas day and this is see
+11:49
+how cool is this I can also apply for a
+11:52
+leave. So let's say employee ID
+11:55
+002 E002
+12:00
+uh would like to apply for 4th July. 4th
+12:04
+July is a holiday in US for July holiday
+12:08
+please apply for this
+12:11
+leave and you can have uh this kind of
+12:15
+typos it's okay it's a language model
+12:18
+once uh once again see from that input
+12:22
+question it figured out that I need to
+12:24
+call apply leave function you see along
+12:28
+with this parameter employee ID this
+12:30
+leave this see it is so smart I just
+12:32
+said fourth July And it figured out that
+12:34
+it is 74 2025. And how did it convert
+12:38
+4th July into this format? Well, using
+12:42
+this dock string. That's why I said this
+12:44
+dock string is important. Claude knows
+12:47
+that apply leave function expects these
+12:50
+leave dates in this particular format
+12:53
+and therefore it converted uh that.
+12:55
+Okay. So allow for this chat is going to
+12:58
+apply for these leaves. And see it has
+13:02
+successfully applied for these leaves.
+13:05
+And now I can say how many leave days
+13:10
+are remaining for
+13:13
+E002. And it says it has 19 days leave.
+13:17
+Okay. Tell me the days of
+13:22
+leave. Days of leave.
+13:26
+for the same person it will understand
+13:28
+it understands the context okay so
+13:30
+E002 it will tell you 4th July I mean
+13:33
+that is the answer I expect see only one
+13:36
+day leave schedule all right folks so
+13:38
+that's it we just built our first MCP
+13:42
+server I'm going to provide you access
+13:44
+of all this code so please go ahead and
+13:47
+try it

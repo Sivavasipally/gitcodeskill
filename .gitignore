@@ -1,0 +1,41 @@
+# Credentials — never commit real config
+config/config.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment variables
+.env
+.env.*
+
+# Runtime output files
+analysis_report.json
+multi_analysis_report.json
+requirement.json
+change_proposal.json
+apply_result.json
+commit_result.json
+
+# Claude
+.claude/
+*.claude
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

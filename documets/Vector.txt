@@ -1,0 +1,345 @@
+Intro
+0:00
+there are some AI startups that have
+0:02
+raised millions of dollars of funding
+0:04
+and they have one product in common
+0:06
+which is Vector database let's try to
+0:09
+understand what exactly is Vector
+0:10
+database today when you search in Google
+0:12
+calories in apple versus employees in
+0:15
+apple Google figures out that the first
+0:17
+Apple means fruit and the second one is
+0:20
+a company have you ever wondered how
+0:22
+does Google does this it uses a
+0:25
+technique called semantic search
+0:26
+semantic search means not searching
+0:29
+using the exact keyword matching but
+0:32
+understanding the intent of a user query
+0:34
+and using the context to perform the
+0:37
+search for doing semantic search
+0:39
+internally it uses the concept of
+0:42
+embedding word embedding or sentence
+0:44
+embedding is nothing but a numerical
+0:46
+representation of text let's first
+0:49
+understand how exactly embedding Works
+Embedding
+0:51
+let's figure out how you can represent
+0:53
+this word Apple into a numeric
+0:55
+presentation given this particular
+0:58
+context one way is to think about
+1:00
+different features or properties of
+1:02
+words here you can have related to
+1:05
+phones easy location has talk Etc as
+1:07
+properties and then you assign value for
+1:09
+each of these properties Revenue here
+1:11
+means 82 billion dollar you get a
+1:14
+sequence of numbers as a result and that
+1:17
+is nothing but a vector so this Vector
+1:20
+is a word embedding for the word Apple
+1:22
+for this particular context if you're
+1:24
+talking about apple the fruit then the
+1:26
+embedding might look something different
+1:28
+because the value of these properties is
+1:31
+different and when you have the
+1:33
+embeddings for different words looking
+1:36
+at them bidding you can say that the
+1:38
+second apple and the word orange they
+1:42
+are similar because look at their values
+1:44
+they are matching of course there are
+1:46
+some values which are not matching but
+1:48
+compared to this Vector in the first
+1:50
+Vector second and third Vector are kind
+1:53
+of similar
+1:55
+same way if you have let's say Samsung
+1:57
+as a word you can represent that into a
+2:00
+numeric presentation is it related to
+2:03
+phone CS is it a location no and when
+2:06
+you look at again all these vectors you
+2:08
+can figure out that the first and the
+2:10
+fourth vectors are kind of similar so
+2:12
+using these vectors you can figure out
+2:16
+the similarity not just similarity you
+2:19
+can actually do a complex arithmetics
+Word to Whack
+2:22
+such as this this is a famous example in
+2:25
+the NLP domain where you can perform
+2:28
+this mathematics using a technique
+2:30
+called word to whack word to whack is a
+2:32
+technique to represent word into a
+2:36
+numeric representation I have made a
+2:37
+separate video so if you want to know
+2:39
+more about it you can go and look at
+2:42
+this video in that video I have
+2:43
+explained how you can generate
+2:45
+handcrafted features for each of these
+2:47
+and you can do this particular math now
+2:50
+just for intuition I explain everything
+2:52
+using handcrafted features but in
+2:55
+reality you use some complex statistical
+2:58
+techniques to generate these word
+3:00
+embeddings again if you have curiosity
+3:02
+you can watch those two videos or this
+3:04
+particular video on bird so far let's
+3:07
+say you have this understanding that
+3:09
+there are variety of these techniques
+3:11
+that you can use to represent a word or
+3:14
+a sentence or even a document into an
+3:18
+embedding and here are just different
+3:20
+techniques which are being used in chat
+3:23
+GPT era obviously Transformer based
+3:25
+embedding techniques are getting popular
+3:27
+so when you're using open AI API for
+3:30
+embedding uh you know what technique it
+3:32
+is using underneath when you are
+3:34
+building any text based AI application
+3:36
+you might have thousands or even
+3:39
+millions of embedding vectors and you
+3:41
+need to store them somewhere when you
+Traditional Database
+3:43
+think about storing them the first
+3:45
+option that comes to mind is a
+3:47
+traditional relational database so let's
+3:49
+say for our use case we have these four
+3:51
+articles the first two radar related to
+3:53
+apple the fruit the remaining are Apple
+3:55
+the company you will first generate the
+3:58
+embedding let's say using open AI API
+4:00
+and then you will save that into let's
+4:03
+say your SQL database now when you have
+4:05
+a search query you will also generate
+4:08
+embedding for that and you will try to
+4:11
+compare this embedding with the stored
+4:12
+embedding and try to retrieve the
+4:14
+relevant documents here you will use a
+4:17
+concept of cosine similarity to retrieve
+4:20
+the matching vectors and you can display
+4:22
+it in your Google search result this in
+4:25
+theory works okay but in reality you
+4:27
+will have millions of Records or even
+4:30
+billions of Records in your database and
+4:33
+that's when things starts getting
+4:34
+interesting because just think about
+4:36
+matching this Vector for a query Vector
+4:39
+if you want to match with these stored
+4:42
+vectors then one of the approach you can
+4:44
+use is linear search where you go one by
+4:47
+one and if cosine similarity is close to
+4:50
+1 then you will put that Vector into
+4:52
+your result data set and then you can
+4:55
+keep on going and store your result
+4:57
+vectors now you already realize the
+5:00
+problem if there are millions of stored
+5:02
+Vector embeddings your competition is
+5:04
+going to be too much you know your your
+5:07
+hairs will be raised because you can't
+5:10
+handle delay and computational
+5:13
+requirements for such a use case you
+5:16
+need to do something smart how do we do
+5:18
+this in a traditional database well we
+5:20
+use a thing called index database index
+5:24
+helps you search things faster similarly
+5:27
+in this particular use case we can use
+5:29
+one hashing function we don't need to go
+5:31
+into detail what that hashing function
+5:33
+is but let's say this hashing function
+5:35
+is creating buckets of similar looking
+5:38
+embeddings okay and then when you have a
+5:42
+search query you can let that go through
+5:45
+the same hashing function which will
+5:47
+bucket it into one of these three
+5:48
+buckets and then within that bucket you
+5:51
+can do individual linear search this way
+5:53
+you are only matching with those vectors
+5:56
+which are in bucket one you don't have
+5:58
+to match it with bucket 2 and bucket
+6:00
+three this will speed things up and this
+Locality Sensitive hashing
+6:03
+technique is called locality sensitive
+6:06
+hashing this is one of the techniques
+6:07
+that Vector databases is using there are
+6:11
+many such techniques and those
+6:13
+techniques are outlined in this
+6:15
+beautifully written article I'll provide
+6:17
+a link to this article you can read
+6:19
+through it so far you realize that
+6:22
+Vector databases help you do faster
+6:24
+search they also help you store things
+6:27
+in an optimal way so these are the two
+6:30
+big benefits why Vector databases are
+6:33
+gaining popularity I hope this video
+6:35
+helped you understand the intuition
+6:37
+behind Vector databases if you have any
+6:40
+question please post in the comment box
+6:41
+below if you like this video please give
+6:43
+it a thumbs up and share it with your
+6:45
+friends thank you for watching
+6:47
+[Music]

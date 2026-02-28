@@ -1,0 +1,173 @@
+You are a senior enterprise development automation expert. Build me a complete, production-ready 
+"Bitbucket + Jira Dev Skill" — a Python-based system with a Streamlit UI that automates the full 
+development workflow from requirement to code change.
+
+## WHAT TO BUILD
+
+Create a complete skill with 8 Python scripts + 1 Streamlit app that does:
+
+### Core Workflow (7 Steps)
+1. **Setup & Config** — Collect and securely store Bitbucket + Jira credentials 
+   (~/.bitbucket-jira-dev/config.json, chmod 600). Support both interactive and CLI-arg modes.
+
+2. **Clone & Analyze Repository** — Given a Bitbucket URL + creds:
+   - Git clone (or pull if exists) with authenticated URL
+   - Detect tech stack: languages (by file extension counting), frameworks (Spring Boot, React, 
+     FastAPI, Angular, Vue, NestJS, Django, etc. via indicator files like pom.xml, package.json), 
+     build tools (Maven, Gradle, npm, pip, Cargo)
+   - Detect architecture patterns: Microservices, MVC, Layered, Monorepo, Micro-frontends, 
+     Event-Driven, API Gateway — based on directory structure and file patterns
+   - Build a SEARCHABLE CODE INDEX using regex:
+     * Java: classes, interfaces, methods, @Mapping/@RequestMapping endpoints, @Entity/@Table
+     * Python: classes, functions (def), Flask/FastAPI routes
+     * JavaScript/TypeScript: classes, functions/arrow functions, Express routes
+     * DB entities across all languages
+   - Extract configurations: .env vars, config files (application.yml, appsettings.json, etc.)
+   - Detect test setup: test directories, frameworks (JUnit, pytest, Jest, Cypress, Playwright)
+   - Generate directory tree (3 levels deep)
+   - Git metadata: recent 10 commits, branches, remotes
+   - Output: `analysis_report.json`
+
+3. **Fetch Jira Requirements** — Given Jira URL + email + API token + ticket ID:
+   - Fetch via Jira REST API v3: /rest/api/3/issue/{ticket}?expand=renderedFields,names
+   - Extract: summary, description (ADF → plain text converter), status, priority, type, 
+     assignee, reporter, labels, components, fix versions, story points, sprint, 
+     acceptance criteria (from custom fields or description parsing)
+   - Fetch sub-tasks, linked issues (inward/outward), comments (last 50), attachment metadata
+   - Output: `requirement.json`
+
+4. **Map Requirements to Code Changes** — Using analysis_report + requirement:
+   - KEYWORD EXTRACTION from ticket summary, description, acceptance criteria, subtasks, 
+     labels, components. Split camelCase/snake_case. Remove stop words.
+   - RELEVANCE SCORING against code index:
+     * Exact match (keyword == element name): +10 points
+     * Substring match (keyword in name): +5 points  
+     * Word match (keyword in camelCase parts): +3 points
+     * Full-text frequency (keyword count in file): +0.5 per hit
+   - Rank files by aggregate score, return top 30
+   - For each file: identify specific LINE RANGES where keywords cluster (merge blocks 
+     within 3 lines, return top 10 locations with code snippets)
+   - Output: `change_proposal.json` with files_to_modify, files_to_create, files_to_delete, 
+     dependencies, config_changes, test_changes, notes
+
+5. **Review & Confirm** — Present proposal for human review. Support:
+   - Confirm all: --confirmed-changes "all"
+   - Cherry-pick: --confirmed-changes "1,3,5"
+   - Inline enrichment: add `suggested_changes` array to any file with types:
+     * "replace": {old_text, new_text} — find and replace first occurrence
+     * "insert_after": {after_line, new_text}
+     * "insert_before": {before_line, new_text}
+     * "append": {new_text}
+     * "full_replace": {new_text}
+
+6. **Apply Changes Locally** — On confirmation:
+   - Create feature branch: feature/<ticket-id>-<slugified-summary>
+   - Apply all suggested_changes via precise string operations
+   - Create new files with parent directories
+   - Delete specified files
+   - Auto-detect and run formatters: black/isort (Python), prettier/eslint (JS), 
+     spotless (Java/Maven)
+   - Auto-detect and run tests: pytest, npm test, mvn test
+   - Generate git diff summary (--stat, --shortstat)
+   - Output: `apply_result.json`
+
+7. **Commit & Push** (optional):
+   - git add -A → git commit -m "feat(<ticket>): <summary>" → git push --set-upstream
+   - Bitbucket PR creation via REST API: /rest/api/1.0/projects/{key}/repos/{slug}/pull-requests
+
+### Orchestrator
+- Single entry point that chains all steps
+- Supports --full (end-to-end) and --step (individual step) modes
+- --auto-apply flag to skip confirmation pause
+
+### Streamlit UI (app.py) — FULL DASHBOARD
+Build a dark-themed Streamlit app (custom CSS matching GitHub dark mode) with:
+
+**Layout:**
+- Sidebar: 7-step navigation with ✅/⬜/🔄 status icons per step
+- Sidebar: Quick Actions (Reset All, View Workspace)
+- Main area: Header with step icon/name/description
+- Pipeline progress bar (7 colored segments: done=green, active=purple-pulse, pending=gray)
+
+**Step 0 — Setup Screen:**
+- Split into 2 columns: Bitbucket config (URL, username, app-password, branch) | Jira config (URL, email, token, ticket)
+- Workspace directory input
+- "Test Bitbucket Connection" button (runs git ls-remote)
+- "Test Jira Connection" button (calls /rest/api/3/myself)
+- Save Configuration button with validation
+
+**Step 1 — Clone & Analyze Screen:**
+- One-click "Clone & Analyze" button with progress bar
+- Terminal output display (green-on-black monospace div)
+- Results in 5 tabs:
+  * Tech Stack: language progress bars + percentage, framework list, build tools
+  * Architecture: pattern badges, top-level module grid
+  * Code Index: sub-tabs for Classes, Functions, API Endpoints, DB Entities (each showing name + file)
+  * Structure: file tree with folder/file icons
+  * Full Report: st.json() viewer
+- Metric cards row: Total Files, Classes, Functions, API Endpoints, DB Entities, Test Files
+
+**Step 2 — Fetch Requirements Screen:**
+- Ticket ID input (can change on the fly)
+- "Fetch" button with terminal output
+- Ticket header card with status badge (colored by status)
+- Metric cards: Story Points, Sub-tasks, Linked Issues, Comments, Attachments
+- 5 tabs: Description, Acceptance Criteria, Sub-tasks (with status badges), Links, Full JSON
+
+**Step 3 — Map Changes Screen:**
+- "Map Requirements" button with progress
+- Metric cards: Files to Modify/Create/Delete, Notes
+- Each file as expandable section showing: matches, line locations with code snippets
+- Full proposal JSON viewer
+
+**Step 4 — Review Screen:**
+- Checkbox per file (with Select All toggle)
+- Per-file expandable "Add specific changes" section:
+  * Dropdown: replace | insert_after | insert_before | append | full_replace
+  * Text areas for old_text, new_text, line numbers
+  * "Change added!" confirmation
+- Save Updated Proposal button
+
+**Step 5 — Apply Screen:**
+- Radio: All Changes vs Selected Changes Only
+- "Apply Changes" button with terminal output
+- Results: metric cards, branch name, diff summary, test pass/fail
+- Expandable git diff --stat and full diff viewers
+
+**Step 6 — Commit & Push Screen:**
+- Auto-generated commit message input (editable)
+- 3 buttons: Check Status | Commit Only | Commit & Push (with balloons on success)
+- PR creation form: title, target branch, description (auto-generated), project key, repo slug
+
+**Styling:**
+- Background: #0E1117, cards: #161b22, borders: #21262d
+- Primary accent: #6C63FF (purple), success: #3fb950, warning: #d29922, error: #f85149
+- Terminal: black background, green monospace text
+- Status badges: rounded pills with colored borders
+- Metric cards: centered value (1.8em bold) + uppercase label (0.78em gray)
+- Pipeline bar: colored gradients between steps
+- No emojis in code, use them in UI labels only
+
+## CONSTRAINTS
+- Python 3.8+ compatible
+- All scripts must work standalone (CLI args) AND be callable from Streamlit
+- Use `subprocess.run()` from Streamlit to call scripts (not imports) for isolation
+- Respect .gitignore when scanning (use pathspec library)
+- Skip: node_modules, .git, __pycache__, build, dist, target, venv, .idea, .vscode
+- Never modify main/master directly — always create feature branches
+- Credentials: never log passwords, mask in display (show first4****last4)
+- All JSON outputs: pretty-printed with indent=2
+- pip install with --break-system-packages flag
+- Handle timeouts (300s for clone/analyze, 30s for API calls)
+- Graceful error handling with user-friendly messages
+
+## ENTERPRISE CONTEXT (for smarter defaults)
+This is designed for enterprise banking platforms with:
+- Microservices architecture (90+ containers)
+- Multiple micro-frontends (25+)
+- Core banking integrations (Finacle, Avaloq, T24)
+- Tech stack: Java/Spring Boot backend, React/TypeScript frontend, Python for AI/ML
+- Multi-country deployment (Singapore, Hong Kong, India, Taiwan, China, Indonesia)
+- Tools: Bitbucket Server, Jira Cloud/Server, Jenkins CI/CD, Docker, Kubernetes
+
+Build everything, test all scripts compile without errors, and provide all files.
